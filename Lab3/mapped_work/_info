@@ -1,0 +1,68 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 d/home/ecegrid/a/mg74/ece337/Lab3
+T_opt
+!s110 1600216014
+VVLd[VI[2IDiK9l`Zab]mC3
+04 8 4 work adder_16 fast 0
+=1-80000208fe80-5f615bce-60a6d-1a34
+o-quiet -auto_acc_if_foreign -work mapped_work/ -L /home/ecegrid/a/ece337/Course_Prod/Cell_Libs/AMI_05/vhdl_work -L /home/ecegrid/a/ece337/Class0.5u/GOLD_LIB -Lf /home/ecegrid/a/ece337/Course_Prod/IP_Libs/Lab_IP_Lib/Vsim -suppress 12110 +acc
+tCvgOpt 0
+n@_opt
+OE;O;10.7a;67
+vadder_16
+Z1 DXx6 sv_std 3 std 0 22 >9az<^>2ff9DAl3OFGaAf1
+Z2 !s110 1600216009
+!i10b 1
+!s100 AAP4^cTDV=>]n?5^bc[ha0
+I@_WW6P?Q[4^=agBee7Xg?1
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+Z4 !s105 adder_16_v_unit
+S1
+R0
+Z5 w1600216006
+Z6 8mapped/adder_16.v
+Z7 Fmapped/adder_16.v
+L0 42
+Z8 OE;L;10.7a;67
+r1
+!s85 0
+31
+Z9 !s108 1600216009.000000
+Z10 !s107 mapped/adder_16.v|
+Z11 !s90 -sv|-work|mapped_work|mapped/adder_16.v|
+!i113 0
+Z12 o-sv -work mapped_work
+Z13 tCoverage 63 CoverExcludeDefault 1 CoverOpt 1 CoverShortCircuit 0 CvgOpt 0
+vadder_16_DW01_add_0
+R1
+R2
+!i10b 1
+!s100 _kUUfH_CDiac4g<;GnT;33
+I=44NzZbJ?FGXTU7A^0zlm2
+R3
+R4
+S1
+R0
+R5
+R6
+R7
+L0 8
+R8
+r1
+!s85 0
+31
+R9
+R10
+R11
+!i113 0
+R12
+R13
+nadder_16_@d@w01_add_0
