@@ -53,13 +53,88 @@ adder_16bit DUT (.a(tb_a), .b(tb_b), .carry_in(tb_carry_in), .sum(tb_sum), .over
 initial begin
   // Create the test-vector array with enough slots for test cases
   // STUDENT TODO: Update the array declaration to have enough slots
-  tb_test_cases = new[1];
+  tb_test_cases = new[16];
 
   // First Test Case/Test-Vector
   tb_test_cases[0].test_name = "Zeros Check";
-  tb_test_cases[0].test_a    = '0;
-  tb_test_cases[0].test_b    = '0;
+  tb_test_cases[0].test_a    = 16'b0000000000000000;
+  tb_test_cases[0].test_b    = 16'b0000000000000000;
   tb_test_cases[0].test_cin  = 1'b0;
+
+  tb_test_cases[1].test_name = "Zeros Check2";
+  tb_test_cases[1].test_a    = 16'b0000000000000000;
+  tb_test_cases[1].test_b    = 16'b0000000000000000;
+  tb_test_cases[1].test_cin  = 1'b1;
+
+  tb_test_cases[2].test_name = "1";
+  tb_test_cases[2].test_a    = 16'b1111111111111111;
+  tb_test_cases[2].test_b    = 16'b1111111111111111;
+  tb_test_cases[2].test_cin  = 1'b0;
+
+  tb_test_cases[3].test_name = "2";
+  tb_test_cases[3].test_a    = 16'b1111111111111111;
+  tb_test_cases[3].test_b    = 16'b1111111111111111;
+  tb_test_cases[3].test_cin  = 1'b1;
+
+  tb_test_cases[4].test_name = "3";
+  tb_test_cases[4].test_a    = 16'b1000000000000000;
+  tb_test_cases[4].test_b    = 16'b1111111111111111;
+  tb_test_cases[4].test_cin  = 1'b0;
+
+  tb_test_cases[5].test_name = "4";
+  tb_test_cases[5].test_a    = 16'b1000000000000000;
+  tb_test_cases[5].test_b    = 16'b1111111111111111;
+  tb_test_cases[5].test_cin  = 1'b1;
+
+  tb_test_cases[6].test_name = "5";
+  tb_test_cases[6].test_a    = 16'b1000000000000000;
+  tb_test_cases[6].test_b    = 16'b0111111111111111;
+  tb_test_cases[6].test_cin  = 1'b0;
+
+  tb_test_cases[7].test_name = "6";
+  tb_test_cases[7].test_a    = 16'b1000000000000000;
+  tb_test_cases[7].test_b    = 16'b0111111111111111;
+  tb_test_cases[7].test_cin  = 1'b1;
+
+  tb_test_cases[8].test_name = "7";
+  tb_test_cases[8].test_a    = 16'b0111111111111111;
+  tb_test_cases[8].test_b    = 16'b1000000000000000;
+  tb_test_cases[8].test_cin  = 1'b0;
+
+  tb_test_cases[9].test_name = "8";
+  tb_test_cases[9].test_a    = 16'b0111111111111111;
+  tb_test_cases[9].test_b    = 16'b1000000000000000;
+  tb_test_cases[9].test_cin  = 1'b1;
+
+  tb_test_cases[10].test_name = "9";
+  tb_test_cases[10].test_a    = 16'b0111111111111111;
+  tb_test_cases[10].test_b    = 16'b1000000000000001;
+  tb_test_cases[10].test_cin  = 1'b0;
+
+  tb_test_cases[11].test_name = "10";
+  tb_test_cases[11].test_a    = 16'b0111111111111111;
+  tb_test_cases[11].test_b    = 16'b1000000000000001;
+  tb_test_cases[11].test_cin  = 1'b1;
+
+  tb_test_cases[12].test_name = "11";
+  tb_test_cases[12].test_a    = 16'b1000000000000001;
+  tb_test_cases[12].test_b    = 16'b0111111111111111;
+  tb_test_cases[12].test_cin  = 1'b0;
+
+  tb_test_cases[13].test_name = "12";
+  tb_test_cases[13].test_a    = 16'b1000000000000001;
+  tb_test_cases[13].test_b    = 16'b0111111111111111;
+  tb_test_cases[13].test_cin  = 1'b1;
+
+  tb_test_cases[14].test_name = "13";
+  tb_test_cases[14].test_a    = 16'b1010101010101010;
+  tb_test_cases[14].test_b    = 16'b0101010101010101;
+  tb_test_cases[14].test_cin  = 1'b0;
+
+  tb_test_cases[15].test_name = "14";
+  tb_test_cases[15].test_a    = 16'b1010101010101010;
+  tb_test_cases[15].test_b    = 16'b0101010101010101;
+  tb_test_cases[15].test_cin  = 1'b1;
 
   // STUDENT TODO: Add your additional test cases here after increasing the array size
 end

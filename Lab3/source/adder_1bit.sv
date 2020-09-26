@@ -1,3 +1,5 @@
+`timescale 1ns / 100ps
+
 module adder_1bit
 (
 	input wire a,
@@ -14,5 +16,7 @@ assign c1=a&b;
 assign sum=s1^carry_in;
 assign s2=s1&carry_in;
 assign carry_out=s2^c1;
+
+
 
 endmodule
