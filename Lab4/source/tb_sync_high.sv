@@ -10,7 +10,7 @@
 
 `timescale 1ns / 10ps
 
-module tb_sync_low();
+module tb_sync_high();
 
   // Define local parameters used by the test bench
   localparam  CLK_PERIOD    = 1;
@@ -40,18 +40,18 @@ module tb_sync_low();
     tb_n_rst = 1'b0;
 
     // Maintain the reset for more than one cycle
-    @(posedge tb_clk);
-    @(posedge tb_clk);
+    @(negedge tb_clk);
+    @(negedge tb_clk);
 
     // Wait until safely away from rising edge of the clock before releasing
-    @(negedge tb_clk);
-    tb_n_rst = 1'b1;
+    @(posedge tb_clk);
+    tb_n_rst = 1'b0;
 
     // Leave out of reset for a couple cycles before allowing other stimulus
     // Wait for negative clock edges, 
     // since inputs to DUT should normally be applied away from rising clock edges
-    @(negedge tb_clk);
-    @(negedge tb_clk);
+    @(posedge tb_clk);
+    @(posedge tb_clk);
   end
   endtask
 
@@ -96,7 +96,7 @@ module tb_sync_low();
   end
   
   // DUT Port map
-  sync_low DUT(.clk(tb_clk), .n_rst(tb_n_rst), .async_in(tb_async_in), .sync_out(tb_sync_out));
+  sync_high DUT(.clk(tb_clk), .n_rst(tb_n_rst), .async_in(tb_async_in), .sync_out(tb_sync_out));
   
   // Test bench main process
   initial
@@ -136,7 +136,7 @@ module tb_sync_low();
                   "after clock cycle while in reset");
     
     // Release the reset away from a clock edge
-    @(posedge tb_clk);
+    @(negedge tb_clk);
     #(2 * FF_HOLD_TIME);
     tb_n_rst  = 1'b1;   // Deactivate the chip reset
     #0.1;
@@ -147,7 +147,7 @@ module tb_sync_low();
     // ************************************************************************
     // Test Case 2: Normal Operation with Input as a '1','0'
     // ************************************************************************    
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Normal Operation with Input as a '1'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -158,15 +158,15 @@ module tb_sync_low();
     tb_async_in = 1'b1;
 
     // Wait for DUT to process stimulus before checking results
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     // Check results
     check_output( 1'b1,
                   "after processing delay");
 
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Normal Operation with Input as a '0'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -177,8 +177,8 @@ module tb_sync_low();
     tb_async_in = 1'b0;
 
     // Wait for DUT to process stimulus before checking results
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     // Check results
@@ -188,7 +188,7 @@ module tb_sync_low();
     // ************************************************************************    
     // Test Case 3: Setup Violation with Input as a '0','1'
     // ************************************************************************
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Setup Violation with Input as a '0'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -200,20 +200,20 @@ module tb_sync_low();
     // -> Need to start with input at oppositte value of main stimulus
     tb_async_in = 1'b1;
     // Allow value to feed in to design
-    @(posedge tb_clk);
+    @(negedge tb_clk);
     // Wait until test is inside the setup time before the next rising clock edge
     #(CLK_PERIOD - (FF_SETUP_TIME * 0.5)); 
     // Change the input value
     tb_async_in = 1'b0;
 
     // Wait for DUT to process the stimulus
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     check_output_meta("after processing delay");
 
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Setup Violation with Input as a '1'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -225,15 +225,15 @@ module tb_sync_low();
     // -> Need to start with input at oppositte value of main stimulus
     tb_async_in = 1'b0;
     // Allow value to feed in to design
-    @(posedge tb_clk);
+    @(negedge tb_clk);
     // Wait until test is inside the setup time before the next rising clock edge
     #(CLK_PERIOD - (FF_SETUP_TIME * 0.5)); 
     // Change the input value
     tb_async_in = 1'b1;
 
     // Wait for DUT to process the stimulus
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     check_output_meta("after processing delay");
@@ -241,7 +241,7 @@ module tb_sync_low();
     // ************************************************************************
     // Test Case 4: Hold Violation with Input as a '0','1'
     // ************************************************************************
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Hold Violation with Input as a '0'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -253,20 +253,20 @@ module tb_sync_low();
     // -> Need to start with input at oppositte value of main stimulus
     tb_async_in = 1'b1;
     // Allow value to feed in to design
-    @(posedge tb_clk);
+    @(negedge tb_clk);
     // Wait until test is inside the hold time after the current rising clock edge
     #(FF_HOLD_TIME * 0.5);
     // Change the input value 
     tb_async_in = 1'b0;
 
     // Wait for DUT to process the stimulus
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     check_output_meta("after processing delay");
 
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Hold Violation with Input as a '1'";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -278,15 +278,15 @@ module tb_sync_low();
     // -> Need to start with input at oppositte value of main stimulus
     tb_async_in = 1'b0;
     // Allow value to feed in to design
-    @(posedge tb_clk);
+    @(negedge tb_clk);
     // Wait until test is inside the hold time after the current rising clock edge
     #(FF_HOLD_TIME * 0.5);
     // Change the input value 
     tb_async_in = 1'b1;
 
     // Wait for DUT to process the stimulus
-    @(posedge tb_clk); 
-    @(posedge tb_clk); 
+    @(negedge tb_clk); 
+    @(negedge tb_clk); 
     // Move away from risign edge and allow for propagation delays before checking
     #(CHECK_DELAY);
     check_output_meta("after processing delay");
@@ -297,7 +297,7 @@ module tb_sync_low();
     // Last Test Case: Steady Stream of Unkown/Metastable inputs 
     //                to showcase random decay behavior
     // ************************************************************************
-    @(negedge tb_clk); 
+    @(posedge tb_clk); 
     tb_test_num = tb_test_num + 1;
     tb_test_case = "Steady Stream of Metastable inputs";
     // Start out with inactive value and reset the DUT to isolate from prior tests
@@ -305,11 +305,11 @@ module tb_sync_low();
     reset_dut();
 
     // Synchronize away from rising edges to avoid accidental timing violations
-    @(negedge tb_clk);
+    @(posedge tb_clk);
     // Set the value to be metastable 
     tb_async_in = 1'bx;
     // Wait for metastable input to get pulled in by the first stage
-    @(posedge tb_clk);
+    @(negedge tb_clk);
 
     // Run for a long time to check for/demonstrate random nature of metastable decays
     for(tb_stream_test_num = 1; tb_stream_test_num <= 100; tb_stream_test_num = tb_stream_test_num + 1)
@@ -317,9 +317,9 @@ module tb_sync_low();
       // Update the tag for the current stream iteration
       $sformat(tb_stream_check_tag, "for stream iteration %d", tb_stream_test_num);
       // Allow second stage to pull decayed value
-      @(posedge tb_clk);
+      @(negedge tb_clk);
       // Move away from risign edge and allow for propagation delays before checking
-      @(posedge tb_clk); 
+      @(negedge tb_clk); 
       #(CHECK_DELAY);
       check_output_meta(tb_stream_check_tag);
     end
