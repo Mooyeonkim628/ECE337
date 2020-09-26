@@ -21,25 +21,23 @@ module comparator
 	reg lte;
 
 	always @ (a, b) begin: COM
-		gte = 1'b0;
-		lte = 1'b0;
-
-		if (a >= b)begin
-			gte = 1'b1;
-		end
 		if (a <= b)begin
 			lte = 1'b1;
+			gte = 1'b0;
 		end
-
-		if (gte == 1'b0) begin
-			gt = 1'b0;
-			lt = 1'b1;
+		else if (b >= a)begin
+			gte = 1'b1;
+			lte = 1'b0;
+		end
+		if (!(lte == 1'b1)) begin
+			gt = 1'b1;
+			lt = 1'b0;
 			eq = 1'b0;
 		end
 
-		else if (lte == 1'b0) begin
-			gt = 1'b1;
-			lt = 1'b0;
+		else if (!(gte == 1'b1)) begin
+			gt = 1'b0;
+			lt = 1'b1;
 			eq = 1'b0;
 		end
 
