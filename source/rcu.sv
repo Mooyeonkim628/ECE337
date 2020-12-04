@@ -1,20 +1,25 @@
 module rcu
 (
-	input clk,
-	input n_rst,
-	input start_bit_detected,
-	input packet_done,
-	input framing_error,
+	input wire clk,
+	input wire n_rst,
+	input wire start_bit_detected,
+	input wire packet_done,
+	input wire framing_error,
 	output reg sbc_clear,
 	output reg sbc_enable,
 	output reg load_buffer,
 	output reg enable_timer
 );
 
-typedef enum bit [2:0] {IDLE, CLEAR, START, STOP, WAIT, LOAD} state;
+parameter IDLE 	= 0,
+	  CLEAR = 1,
+  	  START = 2,
+  	  STOP 	= 3,
+  	  WAIT 	= 4,
+	  LOAD 	= 5;
 
-state curr;
-state next;
+reg [2:0] curr;
+reg [2:0] next;
 
 always_ff@(posedge clk, negedge n_rst)begin 
 	if(!n_rst) begin
@@ -47,10 +52,10 @@ always_comb begin
 			next = WAIT;
 		end
 		WAIT:begin
-			if(framing_error)
-				next = IDLE;
-			else
+			if(!framing_error)
 				next = LOAD;
+			else
+				next = IDLE;
 		end
 		LOAD:begin
 			next = IDLE;
@@ -59,53 +64,37 @@ always_comb begin
 	endcase
 end
 
-always_comb
-begin	
+always_comb begin
+
 	sbc_clear = 0;
 	sbc_enable = 0;
 	load_buffer = 0;
 	enable_timer = 0;
-	if(curr == IDLE)
-	begin
+
+	if(curr == IDLE) begin
 		sbc_clear = 0;
 		sbc_enable = 0;
 		load_buffer = 0;
 		enable_timer = 0;
 	end
-	else if(curr == CLEAR)
-	begin
+	else if(curr == CLEAR) begin
 		sbc_clear = 1;
-		sbc_enable = 0;
-		load_buffer = 0;
-		enable_timer = 0;
 	end
-	else if(curr == START)
-	begin
-		sbc_clear = 0;
-		sbc_enable = 0;
-		load_buffer = 0;
+	else if(curr == START) begin
 		enable_timer = 1;
 	end
-	else if(curr == STOP)
-	begin
-		sbc_clear = 0;
+	else if(curr == STOP) begin
 		sbc_enable = 1;
-		load_buffer = 0;
-		enable_timer = 0;
 	end
-	else if(curr == WAIT)
-	begin
+	else if(curr == WAIT) begin
 		sbc_clear = 0;
 		sbc_enable = 0;
 		load_buffer = 0;
 		enable_timer = 0;
 	end
-	else if(curr == LOAD)
-	begin
-		sbc_clear = 0;
-		sbc_enable = 0;
+	else if(curr == LOAD)begin
 		load_buffer = 1;
-		enable_timer = 0;
 	end
 end
+
 endmodule
